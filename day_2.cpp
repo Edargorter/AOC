@@ -61,17 +61,12 @@ int get_num_valid2(){
 	if(inp){
 		string line;
 		while(getline(inp, line)){
-			bool valid = false;
 			vector<string> tokens = get_split(line, ' ');
 			vector<string> nums = get_split(tokens[0], '-');
 			int first = stoi(nums[0]) - 1;
 			int second = stoi(nums[1]) - 1;
 			char cc = tokens[1].at(0);
-			if(tokens[2][first] == cc)
-				valid = !valid;
-			if(tokens[2][second] == cc)
-				valid = !valid;
-			count += valid;
+			count += (tokens[2][first] == cc) ^ (tokens[2][second] == cc);
 		}
 	} else {
 		cout << "File does not exist" << nl;
