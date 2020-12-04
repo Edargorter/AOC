@@ -1,8 +1,8 @@
 //#include <bits/stdc++.h>
 #include "bits.h"
 
-#define newline printf("\n")
 #define nl "\n"
+#define newline cout << nl;
 #define ll long long 
 #define ui unsigned int
 #define ul unsigned long
@@ -42,6 +42,61 @@ pid (Passport ID)
 cid (Country ID)
 **/
 
+vector<string> valid_eye_colours = {"amb","blu","brn","gry","grn","hzl","oth"};
+
+bool is_valid(int id, string val)
+{
+	bool check = true;
+	if(!(id ^ 1)){
+		int i = stoi(val);
+		check = val.length() == 4 && i >= 1920 && i <= 2002;
+	} else if(!(id ^ (1 << 1))){
+		int i = stoi(val);
+		check = val.length() == 4 && i >= 2010 && i <= 2020;
+	} else if(!(id ^ (1 << 2))){
+		int i = stoi(val);
+		check = val.length() == 4 && i >= 2020 && i <= 2030;
+	} else if(!(id ^ (1 << 3))){
+		string end = val.substr(val.length() - 2, 2);
+		if(end == "cm"){
+			int num = stoi(val.substr(0, val.length() - 2));
+			check = num >= 150 && num <= 193;
+		} else if(end == "in"){
+			int num = stoi(val.substr(0, val.length() - 2));
+			check = num >= 59 && num <= 76;
+		} else {
+			check = false;
+		}
+	} else if(!(id ^ (1 << 4))){
+		if(val[0] == '#' && val.length() == 7){
+			for(char c : val.substr(1, val.length())){
+				if(c < 0x30 || (c > 0x39 && c < 0x60) || c > 0x66){
+					check = false;
+					break;
+				}
+			}	
+		} else {
+			check = false;
+		}
+	} else if(!(id ^ (1 << 5))){
+		if(find(begin(valid_eye_colours), end(valid_eye_colours), val) == end(valid_eye_colours)){
+			check = false;
+		}
+	} else if(!(id ^ (1 << 6))){
+		if(val.length() == 9){
+			for(char c : val){
+				if(c < 0x30 || c > 0x39){
+					check = false;
+					break;
+				}
+			}
+		} else {
+			check = false;
+		}
+	} 
+	return check;
+}
+
 int main(int argc, char **argv)
 {
 
@@ -54,39 +109,44 @@ int main(int argc, char **argv)
 		cout << itr->first << " " << (int) itr->second << nl;
 	}
 
-	int count = 0;
-	//ifstream inp("input");
-	if(argc < 1){
-		cout << "Needs file argument." << nl;
-		exit(1);
+	string input_file;
+	if(argc < 2){
+		cout << "No file arguemnt. Using 'input'" << nl;
+		input_file = "input";
+	} else {
+		input_file = argv[1];
 	}
-	ifstream inp(argv[1]);
+	int count = 0;
+	ifstream inp(input_file);
 	if(inp){
 		string line;
 		uc check = 0;	
 
+		bool valid = true;
 		while(getline(inp, line)){
-			cout << line << nl;
+			//cout << line << nl;
 			if(line.empty()){
-				//cout << "Check: " << check;
-				if(check == 0x7f || check == 0xff){
-					//cout << " Valid.";
-					count++;
-				}
-				//cout << nl;
+				count += valid && (check == 0x7f || check == 0xff);
+				newline;
 				check = 0;
+				valid = true;
 			}
 			vector<string> f = get_split(line, ' ');
 			for(string s : f){
-				check |= pos[s.substr(0, 3)];
-				cout << (int) check << " ";
+				vector<string> keys = get_split(s, ':');
+				int id = pos[keys[0]];
+				cout << keys[0] << " " << keys[1] << " ";
+				cout << id << " ";
+				bool result = is_valid(id, keys[1]);
+				cout << (result ? "True" : "False") << nl;
+				valid = valid && result;
+				check |= id;
+				//cout << (int) check << " ";
 			}
-			cout << nl << (int) check << nl;
+			//cout << nl << (int) check << nl;
+			cout << "VALID: " << valid << nl;
 		}
-		if(check == 0x7f || check == 0xff){
-			//cout << " Valid.";
-			count++;
-		}
+		count += valid && (check == 0x7f || check == 0xff);
 	} else {
 		cout << "File does not exist." << nl;
 		exit(2);

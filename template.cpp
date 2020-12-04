@@ -1,8 +1,8 @@
 #include <bits/stdc++.h>
 //#include "bits.h"
 
-#define newline printf("\n")
 #define nl "\n"
+#define newline cout << nl;
 #define ll long long 
 #define ui unsigned int
 #define ul unsigned long
@@ -35,7 +35,7 @@ vector<string> get_split(string line, char delimiter){
 int main(int argc, char **argv)
 {
 	string input_file;
-	if(argc < 1){
+	if(argc < 2){
 		cout << "No file arguemnt. Using 'input'" << nl;
 		input_file = "input";
 	} else {
