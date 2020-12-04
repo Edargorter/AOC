@@ -1,4 +1,5 @@
-#include <bits/stdc++.h>
+//#include <bits/stdc++.h>
+#include "bits.h"
 
 #define newline printf("\n")
 #define nl "\n"
@@ -41,7 +42,7 @@ pid (Passport ID)
 cid (Country ID)
 **/
 
-int main()
+int main(int argc, char **argv)
 {
 
 	vector<string> fields = {"byr","iyr","eyr","hgt","hcl","ecl","pid","cid"};
@@ -55,12 +56,17 @@ int main()
 
 	int count = 0;
 	//ifstream inp("input");
-	ifstream inp("temp");
+	if(argc < 1){
+		cout << "Needs file argument." << nl;
+		exit(1);
+	}
+	ifstream inp(argv[1]);
 	if(inp){
 		string line;
 		uc check = 0;	
 
 		while(getline(inp, line)){
+			cout << line << nl;
 			if(line.empty()){
 				//cout << "Check: " << check;
 				if(check == 0x7f || check == 0xff){
@@ -75,7 +81,7 @@ int main()
 				check |= pos[s.substr(0, 3)];
 				cout << (int) check << " ";
 			}
-			cout << nl;
+			cout << nl << (int) check << nl;
 		}
 		if(check == 0x7f || check == 0xff){
 			//cout << " Valid.";
@@ -83,7 +89,7 @@ int main()
 		}
 	} else {
 		cout << "File does not exist." << nl;
-		exit(1);
+		exit(2);
 	}
 	cout << "Valid passports: " << count << nl;
 }

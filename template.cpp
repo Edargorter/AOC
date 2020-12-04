@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+//#include "bits.h"
 
 #define newline printf("\n")
 #define nl "\n"
@@ -31,9 +32,16 @@ vector<string> get_split(string line, char delimiter){
 }
 **/
 
-int main()
+int main(int argc, char **argv)
 {
-	ifstream inp("input");
+	string input_file;
+	if(argc < 1){
+		cout << "No file arguemnt. Using 'input'" << nl;
+		input_file = "input";
+	} else {
+		input_file = argv[1];
+	}
+	ifstream inp(input_file);
 	if(inp){
 		int temp;
 		while(inp >> temp){
