@@ -127,7 +127,6 @@ int main(int argc, char **argv)
 			//cout << line << nl;
 			if(line.empty()){
 				count += valid && (check == 0x7f || check == 0xff);
-				newline;
 				check = 0;
 				valid = true;
 			}
