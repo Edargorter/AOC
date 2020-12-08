@@ -1,4 +1,8 @@
 *.out
 .*.*.swp
 .*.swp
+.*.dSYM
 *.dSYM
+.config
+input
+temp
