@@ -9,29 +9,6 @@
 
 using namespace std;
 
-/**
-vector<string> get_split(string line, char delimiter){
-	vector<string> info;
-	string word = "";
-	bool check = false;
-	for(int i = 0; i < line.length(); i++){
-		if(line[i] == delimiter){
-			if(!check){
-				check = true;
-				info.push_back(word);
-				word = "";
-			}
-		} else {
-			word += line[i];
-			check = false;
-			if(i == line.length() - 1)
-				info.push_back(word);
-		}
-	}
-	return info;
-}
-**/
-
 int main(int argc, char **argv)
 {
 	string input_file;
@@ -42,10 +19,65 @@ int main(int argc, char **argv)
 		input_file = argv[1];
 	}
 	ifstream inp(input_file);
+	vector<int> ni;
 	if(inp){
-		string line;
-		while(getline(inp, line)){
+		int x;
+		while(inp >> x){
+			ni.push_back(x);
 		}
+		int range = 25;
+		int i;
+		for(i = range; i < ni.size(); i++){
+			x = ni[i];
+			bool check = false;
+			for(int j = i - range; j < i - 1; j++){
+				for(int k = j + 1; k < i; k++){
+					if(ni[j] + ni[k] == x){
+						check = true;
+						break;
+					}
+				}
+			}
+			if(!check){
+				cout << "PART 1: " << x << nl;
+				break;
+			}
+		}
+		//PART 2
+		vector<ll> pre = {ni[0]};
+		for(int j = 1; j < i; j++)
+			pre.push_back(pre[j - 1] + ni[j]);
+
+		ll sum;
+		bool found = false;
+		int mid;
+		int j;
+		for(j = 0; j < i - 1; j++){
+			int low = j, high = i - 1;
+			mid = low + (high - low)/2;
+			while(low != mid){
+				sum = pre[mid] - pre[j] + ni[j];
+				if(sum > x){
+					high = mid;
+				} else if(sum < x){
+					low = mid;
+				} else {
+					found = true;
+					break;
+				}
+				mid = low + (high - low)/2;
+			}
+			if(found)
+				break;
+		}
+		vector<int> subarr;
+		for(int k = j; k <= mid; k++)
+			subarr.push_back(ni[k]);
+
+		sort(subarr.begin(), subarr.end());
+
+		cout << "PART 2: " << subarr[0] + subarr[subarr.size() - 1] << nl;
+		
 	} else {
 		cout << "File does not exist." << nl;
 		exit(1);
