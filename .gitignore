@@ -5,4 +5,4 @@
 *.dSYM
 .config
 input
-temp
+*.temp
