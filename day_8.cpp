@@ -61,7 +61,7 @@ int main(int argc, char **argv)
 {
 	string input_file;
 	if(argc < 2){
-		cout << "No file arguemnt. Using 'input'" << nl;
+		cout << "No file argument. Using 'input'" << nl;
 		input_file = "input";
 	} else {
 		input_file = argv[1];
