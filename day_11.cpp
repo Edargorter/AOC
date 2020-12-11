@@ -77,7 +77,7 @@ int main(int argc, char **argv)
 					int occ = get_occ_immediate(i, j);
 					if(c == 'L' && occ == 0)
 						nc = '#';
-					if(c == '#' && occ >= 4)
+					else if(c == '#' && occ >= 4)
 						nc = 'L';
 					if(nc != seats[i][j])
 						changed = true;
@@ -107,7 +107,7 @@ int main(int argc, char **argv)
 					int occ = get_occ_dist(i, j);
 					if(c == 'L' && occ == 0)
 						nc = '#';
-					if(c == '#' && occ >= 5)
+					else if(c == '#' && occ >= 5)
 						nc = 'L';
 					if(nc != seats[i][j])
 						changed = true;
