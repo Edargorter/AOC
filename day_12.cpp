@@ -9,27 +9,6 @@
 
 using namespace std;
 
-vector<string> get_split(string line, char delimiter){
-	vector<string> info;
-	string word = "";
-	bool check = false;
-	for(int i = 0; i < line.length(); i++){
-		if(line[i] == delimiter){
-			if(!check){
-				check = true;
-				info.push_back(word);
-				word = "";
-			}
-		} else {
-			word += line[i];
-			check = false;
-			if(i == line.length() - 1)
-				info.push_back(word);
-		}
-	}
-	return info;
-}
-
 int main(int argc, char **argv)
 {
 	string input_file;
@@ -55,7 +34,7 @@ int main(int argc, char **argv)
 			char d = line[0];
 			int val = stoi(line.substr(1,line.length()-1));
 			if(d == 'L'){
-				dir = (4 + dir - val/90) % 4;
+				dir = (dir + 3*val/90) % 4;
 			} else if(d == 'R'){
 				dir = (dir + val/90) % 4;
 			} else if(d == 'F'){
@@ -97,6 +76,7 @@ int main(int argc, char **argv)
 				x += wx*val;
 				y += wy*val;
 			} else if(d == 'R'){
+				int 
 				for(int i = 0; i < val/90; i++){
 					int temp = wx;
 					wx = wy;
