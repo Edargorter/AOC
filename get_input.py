@@ -38,6 +38,7 @@ try:
     with open("input", 'w') as f:
         f.write(data)
         print("Input successfully written")
+    os.system("cat input")
 
 except Exception as e:
     print(e)

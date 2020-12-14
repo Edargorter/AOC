@@ -50,4 +50,5 @@ int main(int argc, char **argv)
 		cout << "File does not exist." << nl;
 		exit(1);
 	}
+	inp.close();
 }
