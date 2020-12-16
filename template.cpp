@@ -6,6 +6,8 @@
 #define ll long long 
 #define ui unsigned int
 #define ul unsigned long
+#define ull unsigned long long
+#define bp push_back 
 
 using namespace std;
 
