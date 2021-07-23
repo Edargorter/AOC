@@ -7,6 +7,7 @@
 #define ll long long 
 #define ui unsigned int
 #define ul unsigned long
+#define ull unsigned long long
 #define pii pair<int, int>
 #define pb push_back
 
@@ -33,16 +34,9 @@ vector<string> get_split(string line, char delimiter){
 	return info;
 }
 
-struct rule
+bool cand_sort(const vector<int>& a, const vector<int>& b)
 {
-	string field;
-	int low;
-	int high;
-};
-
-bool rule_sort(const struct rule& a, const struct rule& b)
-{
-	return a.low < b.low;
+	return a.size() < b.size();
 }
 
 int main(int argc, char **argv)
@@ -57,7 +51,7 @@ int main(int argc, char **argv)
 	ifstream inp(input_file);
 	if(inp){
 		string line;
-		vector<rule> rules;
+		vector<pair<string, pair<pii, pii>>> rules;
 
 		//Rules 
 		while(getline(inp, line)){
@@ -67,12 +61,16 @@ int main(int argc, char **argv)
 			string field = tokens[0];
 			tokens = get_split(tokens[1], ' ');
 			vector<string> limits = get_split(tokens[1], '-');
-			rules.pb({field, stoi(limits[0]), stoi(limits[1])});
-			limits = get_split(tokens[3], '-');
-			rules.pb({field, stoi(limits[0]), stoi(limits[1])});
+			vector<string> limits2 = get_split(tokens[3], '-');
+			pair<string, pair<pii, pii>> temp = {field, {{stoi(limits[0]), stoi(limits[1])}, {stoi(limits2[0]), stoi(limits2[1])}}};
+			rules.pb(temp);
 		}
 
-		sort(rules.begin(), rules.end(), rule_sort);
+		for(int r = 0; r < rules.size(); r++){
+			pii a = rules[r].second.first;
+			pii b = rules[r].second.second;
+			cout << " RULE " << r << ": " << a.first << "-" << a.second << " --- " << b.first << "-" << b.second << nl;
+		}
 
 		//Your ticket
 		getline(inp, line);
@@ -80,77 +78,124 @@ int main(int argc, char **argv)
 		vector<string> tokens = get_split(line, ',');
 		vector<int> ticket;
 
+		vector<vector<int>> valid_t;
+
 		for(string t : tokens)
 			ticket.pb(stoi(t));
 
-		sort(ticket.begin(), ticket.end());
 		getline(inp, line);
 		getline(inp, line);
 
-		
 		//Nearby tickets
 		int count = 0;
 		while(getline(inp, line)){
+			cout << "Nearby ticket: " << line << nl;
 			tokens = get_split(line, ',');
-			vector<int> near_ticket;
+			vector<int> near;
 
 			for(string t : tokens)
 				near.pb(stoi(t));
 
 			bool valid = true;
-			for(int nt : near){
-				int low = 0;
-				int high = rules.size();
-				int med = low + (high - low)/2;
-				int prev_med = med - 1;
-				bool found = false;
 
-				while(med != prev_med){
-					//cout << "NT: " << nt << " med:" << med << " high: " << high << " low: " << low << " rule:" << rules[med].low << "-" << rules[med].high << nl;
-					prev_med = med;
-					if(nt >= rules[med].low && nt <= rules[med].high){
-						found = true;
-						break;
-					} else if(nt < rules[med].low){
-						high = med;
-					} else {
-						low = med;
-					}
-					med = low + (high - low)/2;
+			for(int i = 0; i < near.size(); i++){
+				int n = near[i];
+				bool valid_field = false;
+	
+				for(int r = 0; r < rules.size(); r++){
+					pii a = rules[r].second.first;
+					pii b = rules[r].second.second;
+					if((n >= a.first && n <= a.second) || (n >= b.first && n <= b.second)){
+						valid_field = true;
+					} 
 				}
-				if(found){
-					int temp = med;
-					found = false;
-					for(;temp < rules.size(), nt >= rules[temp].low; temp++){
-						if(nt <= rules[temp].high){
-							found = true;
-							break;
-						}
-					}
-				}
-				if(!found){
-					int temp = med;
-					for(;temp >= 0, nt >= rules[temp].low; temp--){
-						if(nt <= rules[temp].high){
-							found = true;
-							break;
-						}
-					}
-				}
-				if(!found){
-					count += nt;
+
+				if(!valid_field){
+					count += n;
 					valid = false;
-				}
+				} 
 			}
-			if(valid){
-				//TOOD	
-			}
+			if(valid)
+				valid_t.pb(near);		
 		}
 		cout << "PART 1: " << count << nl;
 
+		bool check[20][20] = {true};
+		for(int i = 0; i < 20; i++)	
+			memset(check[i], 1, 20);
 
+		for(vector<int> t : valid_t){
+			bool temp = false;
+			for(int i = 0; i < rules.size(); i++){
+				int n = t[i];
+				for(int r = 0; r < rules.size(); r++){
+					pii a = rules[r].second.first;
+					pii b = rules[r].second.second;
+					cout << n << " RULE " << r << ": " << a.first << "-" << a.second << " --- " << b.first << "-" << b.second << nl;
+					if((n < a.first || n > a.second) && (n < b.first || n > b.second)){
+						check[i][r] = false;
+						cout << "ummm..." << nl;
+					} else 
+						temp = true;
+				}
+			}
+			cout << temp << nl;
+		}
 
-		cout << "PART 2: " << ans << nl;
+		vector<int> pos;
+		bool taken[20] = {false};
+
+		vector<vector<int>> cands;
+		for(int i = 0; i < rules.size(); i++){		
+			vector<int> cand;
+			for(int j = 0; j < rules.size(); j++){		
+				if(check[i][j]){
+					cand.pb(j);
+				}
+			}
+			cands.pb(cand);
+		}
+
+		for(int i = 0; i < rules.size(); i++){		
+			for(int j = 0; j < rules.size(); j++){		
+				cout << check[i][j] << " ";
+			}
+			newline;
+		}
+
+		sort(cands.begin(), cands.end(), cand_sort);
+
+		for(vector<int> cand : cands){
+			for(int j : cand){
+				if(!taken[j]){
+					pos.pb(j);
+					taken[j] = true;
+					break;
+				}
+			}
+		}
+
+		cout << pos.size() << nl;
+		for(int p : pos)
+			cout << p << " ";
+		newline;
+
+		ull prod = 1;
+		count = 0;
+		for(int i = 0; i < ticket.size(); i++){
+			pii a = rules[pos[i]].second.first;
+			pii b = rules[pos[i]].second.second;
+			cout << ticket[i] << " " << rules[pos[i]].first << " : " << a.first << "-" << a.second << "  " << b.first << "-" << b.second << nl;
+			if(rules[pos[i]].first.substr(0, 9) == "departure"){
+				count++;
+				prod *= (ull) ticket[i];
+				cout << prod << nl;
+			}
+		}
+	
+		
+		cout << "PART 2: " << prod << nl;
+
 	} else {
 		cout << "File does not exist." << nl;
 		exit(1);

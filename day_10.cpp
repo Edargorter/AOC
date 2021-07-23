@@ -24,10 +24,13 @@ int main(int argc, char **argv)
 		int temp;
 		ll od = 0, td = 1;
 		adp.push_back(0);
+
 		while(inp >> temp){
 			adp.push_back(temp);
 		}
+
 		sort(adp.begin(), adp.end());
+
 		for(int i = 1; i < adp.size(); i++){
 			int diff = adp[i] - adp[i-1];
 			if(diff == 1)
@@ -44,13 +47,16 @@ int main(int argc, char **argv)
 		ll back_1 = back_2 + (adp[2] <= 3);
 
 		ll count;
+
 		for(int i = 3; i < adp.size(); i++){
 			cout << back_1 << nl;
 			count = back_1;
+
 			if(adp[i] - adp[i-2] <= 3)
 				count += back_2;
 			if(adp[i] - adp[i-3] <= 3)
 				count += back_3;
+
 			back_3 = back_2;
 			back_2 = back_1;
 			back_1 = count;

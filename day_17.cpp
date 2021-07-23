@@ -12,7 +12,6 @@
 
 using namespace std;
 
-/**
 vector<string> get_split(string line, char delimiter){
 	vector<string> info;
 	string word = "";
@@ -33,7 +32,6 @@ vector<string> get_split(string line, char delimiter){
 	}
 	return info;
 }
-**/
 
 int main(int argc, char **argv)
 {
@@ -46,9 +44,16 @@ int main(int argc, char **argv)
 	}
 	ifstream inp(input_file);
 	if(inp){
+		vector<vector<string>> cube;
 		string line;
+		vector<string> init;
+
 		while(getline(inp, line)){
+			init.pb(line);	
 		}
+
+		int dim = init[0].size() + 10;
+
 	} else {
 		cout << "File does not exist." << nl;
 		exit(1);

@@ -7,6 +7,7 @@ import datetime
 import os
 
 #MMMMMMMmmmmmmmmm SECRET COOKIE...yummmmmy
+
 session_path = os.getenv('HOME') + "/CP/AOC2020/.config"
 
 parser = argparse.ArgumentParser(description="Get input from AOC site")
