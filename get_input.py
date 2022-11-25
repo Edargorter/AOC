@@ -6,9 +6,9 @@ from sys import argv
 import datetime
 import os
 
-#MMMMMMMmmmmmmmmm SECRET COOKIE...yummmmmy
+#SECRET COOKIE... yummy...
 
-session_path = os.getenv('HOME') + "/CP/AOC2020/.config"
+session_path = os.getenv('HOME') + "/projects/AOC/.config"
 
 parser = argparse.ArgumentParser(description="Get input from AOC site")
 parser.add_argument("-p", metavar="path", type=str, help="Path to session cookie")
