@@ -39,7 +39,32 @@ vector<string> get_split(string line, char delimiter){
 void part_1(ifstream& inp)
 {
 	string line;
+	ll max = 0;
+	ll sum = 0;
 	while(getline(inp, line)){
+		if(line == ""){
+			if(sum > max)
+				max = sum;
+			sum = 0;
+		} else 
+			sum += stoi(line);	
+	}
+	if(!max)
+		max = sum;
+	cout << max << nl;
+}
+
+void comp_three(ll& first, ll& second, ll& third, ll cand)
+{
+	if(cand > first){
+		third = second;
+		second = first; 
+		first = cand;
+	} else if(cand > second){
+		third = second;
+		second = cand;
+	} else if(cand > third){
+		third = cand;
 	}
 }
 
@@ -47,8 +72,19 @@ void part_1(ifstream& inp)
 void part_2(ifstream& inp)
 {
 	string line;
+	ll first, second, third = 0;
+	ll sum = 0;
 	while(getline(inp, line)){
+		//cout << first << " " << second << " " << third << nl;
+		if(line == ""){
+			comp_three(first, second, third, sum);
+			sum = 0;
+		} else 
+			sum += stoi(line);	
 	}
+	comp_three(first, second, third, sum);
+
+	cout << first + second + third << nl;
 }
 
 int main(int argc, char **argv)
@@ -63,10 +99,8 @@ int main(int argc, char **argv)
 	ifstream inp(input_file);
 	if(inp){
 		part_1(inp);
-
 		inp.clear();
 		inp.seekg(0);
-
 		part_2(inp);
 	} else {
 		cout << "File does not exist." << nl;

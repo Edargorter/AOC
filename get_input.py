@@ -34,7 +34,7 @@ except Exception as e:
     exit(1)
 
 try:
-    r = requests.get("https://adventofcode.com/2020/day/{}/input".format(day), cookies=cookie)
+    r = requests.get("https://adventofcode.com/2022/day/{}/input".format(day), cookies=cookie)
     data = r.content.decode('utf-8')
     with open("input", 'w') as f:
         f.write(data)
