@@ -11,7 +11,6 @@
 
 using namespace std;
 
-/**
 vector<string> get_split(string line, char delimiter){
 	vector<string> info;
 	string word = "";
@@ -32,22 +31,77 @@ vector<string> get_split(string line, char delimiter){
 	}
 	return info;
 }
-**/
 
 //PART 1
 void part_1(ifstream& inp)
 {
 	string line;
+	string o, r;
+	ll score = 0;
 	while(getline(inp, line)){
+		vector<string> lin = get_split(line, ' ');
+		o = lin[0];
+		r = lin[1];
+		if(o == "A"){
+			if(r == "X")
+				score += 1 + 3;
+			else if(r == "Y")	
+				score += 2 + 6;	
+			else 
+				score += 3;
+		} else if(o == "B"){
+			if(r == "Z")
+				score += 3 + 6;
+			else if(r == "Y")
+				score += 2 + 3;
+			else
+				score += 1;
+		} else if(o == "C"){
+			if(r == "X")
+				score += 1 + 6;	
+			else if(r == "Z")
+				score += 3 + 3;
+			else
+				score += 2;
+		}
 	}
+	cout << score << nl;
 }
 
 //PART 2
 void part_2(ifstream& inp)
 {
 	string line;
+	string o, r;
+	ll score = 0;
 	while(getline(inp, line)){
+		vector<string> lin = get_split(line, ' ');
+		o = lin[0];
+		r = lin[1];
+		if(o == "A"){
+			if(r == "X")
+				score += 3;
+			else if(r == "Y")	
+				score += 1 + 3;	
+			else 
+				score += 2 + 6;
+		} else if(o == "B"){
+			if(r == "X")
+				score += 1;
+			else if(r == "Y")
+				score += 2 + 3;
+			else
+				score += 3 + 6;
+		} else if(o == "C"){
+			if(r == "X")
+				score += 2;
+			else if(r == "Y")
+				score += 3 + 3;
+			else
+				score += 1 + 6;
+		}
 	}
+	cout << score << nl;
 }
 
 int main(int argc, char **argv)
