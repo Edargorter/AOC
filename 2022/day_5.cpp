@@ -11,12 +11,9 @@
 #define pb push_back
 #define vs vector<string>
 #define vvs vector<vector<string>>
-#define vi vector<int>
-#define vvi vector<vector<int>>
 
 using namespace std;
 
-/**
 vector<string> get_split(string line, char delimiter){
 	vector<string> info;
 	string word = "";
@@ -37,22 +34,73 @@ vector<string> get_split(string line, char delimiter){
 	}
 	return info;
 }
-**/
+
+//PART 1 and 2
+void get_stack(ifstream& inp, vs& stack)
+{
+	string line;
+	vs grid;
+	int size;
+	while(getline(inp, line)){
+		if(line != ""){
+			grid.pb(line);
+		} else {
+			vs nums = get_split(grid.back(), ' ');
+			size = stoi(nums.back());
+			for(int i = 0; i < size; i++){
+				string si = "";
+				for(int j = grid.size() - 2; j >= 0; j--){
+					char c = grid[j][i*4 + 1];
+					if(c != ' ')
+						si += c;
+				}
+				stack.pb(si);
+			}
+			break;
+		}
+	}
+}
 
 //PART 1
 void part_1(ifstream& inp)
 {
+	vs stack;
+	get_stack(inp, stack);
 	string line;
+
 	while(getline(inp, line)){
+		vs inst = get_split(line, ' ');
+		int num = stoi(inst[1]);
+		int src = stoi(inst[3]);
+		int dst = stoi(inst[5]);
+		for(int i = 0; i < num; i++){
+			stack[dst - 1] += stack[src - 1].back();
+			stack[src - 1].pop_back();
+		}
 	}
+	for(int i = 0; i < stack.size() ; i++)
+		cout << stack[i].back();
+	newline;
 }
 
 //PART 2
 void part_2(ifstream& inp)
 {
+	vs stack;
+	get_stack(inp, stack);
 	string line;
+
 	while(getline(inp, line)){
+		vs inst = get_split(line, ' ');
+		int num = stoi(inst[1]);
+		int src = stoi(inst[3]);
+		int dst = stoi(inst[5]);
+		stack[dst - 1] += stack[src - 1].substr(stack[src - 1].length() - num, num);
+		stack[src - 1].erase(stack[src - 1].length() - num, num);
 	}
+	for(int i = 0; i < stack.size(); i++)
+		cout << stack[i].back();
+	newline;
 }
 
 int main(int argc, char **argv)
