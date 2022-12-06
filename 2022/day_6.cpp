@@ -2,13 +2,17 @@
 //#include "bits.h"
 
 #define nl "\n"
-#define newline cout << nl;
+#define newline cout << "\n";
 #define ll long long 
 #define ui unsigned int
 #define ul unsigned long
 #define ull unsigned long long
 #define pii pair<int, int>
 #define pb push_back
+#define vs vector<string>
+#define vvs vector<vector<string>>
+#define vi vector<int>
+#define vvi vector<vector<int>>
 
 using namespace std;
 
@@ -34,62 +38,35 @@ vector<string> get_split(string line, char delimiter){
 	return info;
 }
 **/
+int len = 4;
 
-int get_priority(char c){
-	return (c < 0x61) ? (c - 0x41 + 27) : (c - 0x60);
-}
-
-//PART 1 utilising a neat bitwise operation duplicate finder: https://dotnettutorials.net/lesson/finding-duplicates-in-a-string-using-bitwise-operations-in-c/
+//PART 1
 void part_1(ifstream& inp)
 {
 	string line;
-	ll sum = 0;
+	int count = 0;
+	unordered_map<char, int> ls;
 	while(getline(inp, line)){
-		bitset<72> items;
-		int index = 0;
-		for(char c : line){
-			bitset<72> tmp{0x1};
-			tmp <<= c - 0x41;
-
-			if((tmp & items).any() && (index >= line.length()/2)){
-				sum += get_priority(c);
+		for(int i = 0; i < line.length(); i++){
+			if(ls.size() == len){
+				cout << i << nl;
 				break;
-			} else if(index < line.length()/2)
-				items |= tmp;
-			index++;
+			}
+			ls[line[i]]++;
+			if(i >= len){
+				ls[line[i - len]]--;
+				if(!ls[line[i - len]])
+					ls.erase(line[i - len]);
+			}
 		}
 	}
-	cout << sum << nl;
 }
 
 //PART 2
 void part_2(ifstream& inp)
 {
-	string line;
-	ll sum = 0;
-	int count = 0;
-	bitset<72> group{0x0};
-	bitset<72> common = bitset<72>().set();
-	while(getline(inp, line)){
-		for(char c : line){
-			bitset<72> tmp{0x1};
-			tmp <<= c - 0x41;
-			group |= tmp;
-		}
-		common &= group; 
-		group.reset();
-		count++;
-		if(count == 3){
-			char c = 0;
-			while(!common.test(++c)){}
-			c += 0x41;
-			//cout << count << " char " << c << nl;
-			sum += get_priority(c);
-			common = bitset<72>().set();
-			count = 0;
-		}
-	}
-	cout << sum << nl;
+	len = 14;
+	part_1(inp);
 }
 
 int main(int argc, char **argv)
