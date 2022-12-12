@@ -16,7 +16,17 @@
 
 using namespace std;
 
-int bfs(vs& grid, int start_y, int start_x, int goal_y, int goal_x)
+bool reachable_part1(char a, char b)
+{
+	return b <= a + 1;
+}
+
+bool reachable_part2(char a, char b)
+{
+	return a <= b + 1;
+}
+
+int bfs(vs& grid, int start_y, int start_x, char goal, bool (*reachable)(char, char))
 {
 	int y_dim = grid.size();
 	int x_dim = grid[0].size();
@@ -34,7 +44,8 @@ int bfs(vs& grid, int start_y, int start_x, int goal_y, int goal_x)
 	while(!coords.empty()){
 		pair<int, int> curr = coords.front();
 		coords.pop_front();
-		if(curr.first == goal_y && curr.second == goal_x){
+		char elevation = (grid[curr.first][curr.second] == 'E') ? 'z' : grid[curr.first][curr.second];
+		if(grid[curr.first][curr.second] == goal){
 			found = true;
 			break;
 		}
@@ -42,7 +53,8 @@ int bfs(vs& grid, int start_y, int start_x, int goal_y, int goal_x)
 			int ny = curr.first + dir[i][0];
 			int nx = curr.second + dir[i][1];
 			if(ny < y_dim && ny >= 0 && nx < x_dim && nx >= 0){
-				if(!visited[ny][nx] && grid[ny][nx] <= grid[curr.first][curr.second] + 1){
+				char next = (grid[ny][nx] == 'E') ? 'z' : grid[ny][nx];
+				if(!visited[ny][nx] && reachable(elevation, next)){
 					coords.pb({ny, nx});	
 					depth.pb(depth[index] + 1);
 					visited[ny][nx] = true;
@@ -74,21 +86,16 @@ void parts(ifstream& inp)
 				gy = count;
 				gx = i;
 			}
-			if(line[i] == 'a')
-				as.pb({count, i});
 		}
 		count++;
 	}
 
 	grid[y][x] = 'a';
-	grid[gy][gx] = 'z';
+	//grid[gy][gx] = 'z';
 
-	cout << bfs(grid, y, x, gy, gx) << nl;
+	cout << bfs(grid, y, x, 'E', &reachable_part1) << nl;
 
-	int shortest = 1e8;
-	for(pair<int, int> a : as)
-		shortest = min(shortest, bfs(grid, a.first, a.second, gy, gx));
-	cout << shortest << nl;
+	cout << bfs(grid, gy, gx, 'a', &reachable_part2) << nl;
 }
 
 int main(int argc, char **argv)
