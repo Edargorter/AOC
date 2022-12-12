@@ -12,46 +12,22 @@
 
 using namespace std;
 
-/**
-vector<string> get_split(string line, char delimiter){
-	vector<string> info;
-	string word = "";
-	bool check = false;
-	for(int i = 0; i < line.length(); i++){
-		if(line[i] == delimiter){
-			if(!check){
-				check = true;
-				info.push_back(word);
-				word = "";
-			}
-		} else {
-			word += line[i];
-			check = false;
-			if(i == line.length() - 1)
-				info.push_back(word);
-		}
-	}
-	return info;
-}
-**/
-
 //PART 1
 void part_1(ifstream& inp)
 {
 	string line;
-	ll max = 0;
+	ll m = 0;
 	ll sum = 0;
 	while(getline(inp, line)){
 		if(line == ""){
-			if(sum > max)
-				max = sum;
+			m = max(m, sum);
 			sum = 0;
 		} else 
 			sum += stoi(line);	
 	}
-	if(!max)
-		max = sum;
-	cout << max << nl;
+	if(!m)
+		m = sum;
+	cout << m << nl;
 }
 
 void comp_three(ll& first, ll& second, ll& third, ll cand)

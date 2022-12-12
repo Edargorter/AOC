@@ -16,28 +16,6 @@
 
 using namespace std;
 
-/**
-vector<string> get_split(string line, char delimiter){
-	vector<string> info;
-	string word = "";
-	bool check = false;
-	for(int i = 0; i < line.length(); i++){
-		if(line[i] == delimiter){
-			if(!check){
-				check = true;
-				info.push_back(word);
-				word = "";
-			}
-		} else {
-			word += line[i];
-			check = false;
-			if(i == line.length() - 1)
-				info.push_back(word);
-		}
-	}
-	return info;
-}
-**/
 int len = 4;
 
 //PART 1
