@@ -21,7 +21,7 @@ int bfs(vs& grid, int start_y, int start_x, int goal_y, int goal_x)
 	int y_dim = grid.size();
 	int x_dim = grid[0].size();
 
-	vector<pair<int, int>> coords;
+	list<pair<int, int>> coords;
 	vector<vector<bool>> visited(y_dim, vector<bool>(x_dim, false));
 	vi depth;
 	int dir[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
@@ -31,8 +31,9 @@ int bfs(vs& grid, int start_y, int start_x, int goal_y, int goal_x)
 	int index = 0;
 	bool found = false;
 
-	while(index < coords.size()){
-		pair<int, int> curr = coords[index];
+	while(!coords.empty()){
+		pair<int, int> curr = coords.front();
+		coords.pop_front();
 		if(curr.first == goal_y && curr.second == goal_x){
 			found = true;
 			break;
