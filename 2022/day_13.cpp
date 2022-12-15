@@ -17,29 +17,6 @@
 
 using namespace std;
 
-/**
-vector<string> get_split(string line, char delimiter){
-	vector<string> info;
-	string word = "";
-	bool check = false;
-	for(int i = 0; i < line.length(); i++){
-		if(line[i] == delimiter){
-			if(!check){
-				check = true;
-				info.push_back(word);
-				word = "";
-			}
-		} else {
-			word += line[i];
-			check = false;
-			if(i == line.length() - 1)
-				info.push_back(word);
-		}
-	}
-	return info;
-}
-**/
-
 struct token
 {
 	int val;
@@ -145,15 +122,6 @@ bool compare(string a, string b)
 				j = 0;
 			}
 		}
-		/**
-		[[[[10]],1,5,9,2],[],[7,8,[3,10,6,10]],[3],[[],[1,2,[0,2,6],[10,6]],5]]
-
-		[[10,5,[9,[0,9,3,10,2]],8,6],[2,7,[[2,5],2,[2,4,4,9,3],4]]]
-
-		[[[10],5,[9,[0,9,3,10,2]],8,6],[2,7,[[2,5],2,[2,4,4,9,3],4]]]
-
-		[[[[10]],5,[9,[0,9,3,10,2]],8,6],[2,7,[[2,5],2,[2,4,4,9,3],4]]]
-		**/
 		if(i == as.back()->ts.size() && j == bs.back()->ts.size()){
 			as.pop_back();
 			bs.pop_back();
