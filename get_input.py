@@ -1,31 +1,24 @@
 #!/usr/bin/env python3
 
 import requests
-import argparse 
 from sys import argv 
 import datetime
 import os
 
 #SECRET COOKIE... yummy...
 
-session_path = os.getenv('HOME') + "/projects/AOC/.config"
+year = 2023
 
-parser = argparse.ArgumentParser(description="Get input from AOC site")
-parser.add_argument("-p", metavar="path", type=str, help="Path to session cookie")
-parser.add_argument("-d", metavar="day", type=int, help="Day of the month")
-args = parser.parse_args()
+session_path = os.getenv('HOME') + "/projects/AOC/.config"
 
 day = datetime.date.today().day
 
-if not args.d:
+if len(argv) < 2:
     print("No day specified. Using current date.")
 else:
-    day = args.d
+    day = argv[1]
 
 cookie = {}
-
-if args.p:
-    session_path = args.p
 
 try:
     cookie["session"] = open(session_path, 'r').readline().strip()
@@ -34,7 +27,7 @@ except Exception as e:
     exit(1)
 
 try:
-    r = requests.get("https://adventofcode.com/2022/day/{}/input".format(day), cookies=cookie)
+    r = requests.get("https://adventofcode.com/{}/day/{}/input".format(year, day), cookies=cookie)
     data = r.content.decode('utf-8')
     with open("input", 'w') as f:
         f.write(data)
