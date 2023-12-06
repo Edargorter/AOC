@@ -14,12 +14,13 @@ session_path = os.getenv('HOME') + "/projects/AOC/.config"
 year = datetime.date.today().year
 day = datetime.date.today().day
 
-print("Fetching input for day/year {}/{}".format(day, year))
 
 if len(argv) < 2:
     print("No day specified. Using current date.")
 else:
     day = argv[1]
+
+print("Fetching input for day/year {}/{}".format(day, year))
 
 cookie = {}
 

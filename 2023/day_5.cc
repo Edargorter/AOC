@@ -88,27 +88,10 @@ void part_2(ifstream& inp)
 
 	auto update = [&](vector<vector<uint64_t>>& mappings){
 		for(int i = 0; i < convert.size(); i++){
-			newline;
 			for(int j = 0; j < mappings.size(); j++){
 				uint64_t dest = mappings[j][0];
 				uint64_t src = mappings[j][1];
 				uint64_t range = mappings[j][2];
-				cout << " (" << convert[i].start << "," << convert[i].end << ") -> [" << dest << " " << src << " " << range << "]\n";
-
-				/*
-				  [start -------- end)
-				[src -------- src+range)
-
-				     [start -------- end)
-				[src --- src+range)
-				
-				[start -------- end)
-				     [src --- src+range)
-
-				[start ------------- end)
-				     [src - src+range)
-				*/
-
 				uint64_t src_max = src + range; // Max source val 
 				if(convert[i].start >= src && convert[i].start < src_max){
 					if(convert[i].end > src_max){
@@ -118,16 +101,17 @@ void part_2(ifstream& inp)
 					convert[i].start = dest + (convert[i].start - src);
 					convert[i].end = dest + (convert[i].end - src);
 					break;
-				} else if(convert[i].start < src && src < convert[i].end){
-					uint64_t new_range = 0;
+				} else if(convert[i].start <= src && src < convert[i].end){
+					uint64_t new_end = 0;
 					if(src_max < convert[i].end){
-						new_range = range;
+						new_end = src_max;
 						convert.push_back({src_max, convert[i].end});
 					} else {
-						new_range = convert[i].end - src;
+						new_end = convert[i].end;
 					}
-					convert.push_back({src, src + new_range});
+					convert.push_back({src, new_end});
 					convert[i].end = src;
+					i--;
 					break;
 				}
 			}
@@ -152,11 +136,7 @@ void part_2(ifstream& inp)
 		}
 	}
 	uint64_t minl = convert[0].start;
-	for(int i = 0; i < convert.size(); i++){
-		cout << convert[i].start << " ";
-		minl = min(convert[i].start, minl);
-	}
-	newline;
+	for(int i = 0; i < convert.size(); i++) minl = min(convert[i].start, minl);
 	cout << "Part 2: " << minl << nl;
 }
 
