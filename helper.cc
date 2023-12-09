@@ -1,4 +1,42 @@
-vector<string> get_split(string line, char delimiter){
+auto findCycle = [&](int node) -> pair<int, int>{
+	int ins = 0;
+	int jns = 0;
+	int a = next(node, ins);
+	int b = next(node, jns);
+	b = next(b, jns);
+	while(a != b){
+		a = next(a, ins);	
+		b = next(b, jns);	
+		b = next(b, jns);	
+	}
+	int mu = 0;
+	a = node;
+	ins = 0;
+	while(a != b){
+		a = next(a, ins);
+		b = next(b, jns);
+		mu++;
+	}
+	int lam = 1;
+	b = next(a, ins);
+	while(a != b){
+		b = next(b, ins);
+		lam++;
+	}
+	return {mu, lam};
+};
+
+uint64_t getLCM(vector<int>& nums)
+{
+	uint64_t lcm = 1;
+	for(int n : nums){
+		lcm = (lcm * n)/gcd(lcm, n);
+	}
+	return lcm;
+};
+
+vector<string> get_split(string line, char delimiter)
+{
 	vector<string> info;
 	string word = "";
 	bool check = false;
