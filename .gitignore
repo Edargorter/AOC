@@ -8,5 +8,6 @@ input
 out
 *.temp
 *.tmp
+tmp
 test.cc
 test*

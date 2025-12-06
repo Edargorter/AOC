@@ -7,9 +7,7 @@ import os
 
 #SECRET COOKIE... yummy...
 
-year = 2023
-
-session_path = os.getenv('HOME') + "/projects/AOC/.config"
+session_path = os.getenv('HOME') + "/projects/personal/AOC/.config"
 
 year = datetime.date.today().year
 day = datetime.date.today().day
