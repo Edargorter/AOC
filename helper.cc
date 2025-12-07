@@ -39,19 +39,24 @@ vector<string> get_split(string line, char delimiter)
 {
 	vector<string> info;
 	string word = "";
-	bool check = false;
+	int pos = 0;
+	int len = 0;
+	bool inword = false;
 	for(int i = 0; i < line.length(); i++){
 		if(line[i] == delimiter){
-			if(!check){
-				check = true;
-				info.push_back(word);
-				word = "";
+			if (inword) {
+				info.push_back(line.substr(pos, len));
+				inword = false;
 			}
 		} else {
-			word += line[i];
-			check = false;
+			if (!inword) {
+				pos = i;
+				len = 0;
+			}
+			len++;
+			inword = true;
 			if(i == line.length() - 1)
-				info.push_back(word);
+				info.push_back(line.substr(pos, len));
 		}
 	}
 	return info;
